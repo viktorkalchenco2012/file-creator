@@ -1,0 +1,42 @@
+#include <iostream>
+#include <string>
+#include <fstream>
+#include <windows.h>
+#include <Lmcons.h>
+#include <cstdlib>
+using namespace std;
+
+int main() {
+
+	char username[UNLEN + 1];
+	DWORD username_len = UNLEN + 1;
+
+	if (GetUserNameA(username, &username_len)) {
+		std::cout << "Username: " << username << std::endl;
+	}
+
+	std::string filePath = "C:\\Users\\" + std::string(username) + "\\Desktop\\not_a_virus.txt";
+	cout << filePath;
+
+	
+	std::ofstream file(filePath, ios_base::out);
+	if (file.is_open())
+	{
+		file.close();
+	}
+	else
+	{
+		return 1;
+	}
+	ifstream(filePath, ios_base::in);
+	file.open(filePath);
+	if (file.is_open()) {
+		file << "hello" << endl << "world" << endl;
+		file.close();
+	}
+	else
+	{
+		return 200;
+	}
+	return 0;
+}
