@@ -4,6 +4,7 @@
 #include <windows.h>
 #include <Lmcons.h>
 #include <cstdlib>
+#include <shellapi.h>
 using namespace std;
 
 int main() {
@@ -16,7 +17,7 @@ int main() {
 	}
 
 	std::string filePath = "C:\\Users\\" + std::string(username) + "\\Desktop\\not_a_virus.txt";
-	cout << filePath;
+	std::cout << filePath;
 
 	
 	std::ofstream file(filePath, ios_base::out);
@@ -38,5 +39,26 @@ int main() {
 	{
 		return 200;
 	}
+	std::string appToOpen;
+
+#ifdef _WIN32
+	appToOpen = filePath;
+#elif __APPLE__
+	appToOpen = "open /Applications/Calculator.app";
+#elif __linux__
+	appToOpen = "xdg-open https://www.google.com";
+#else
+	std::cerr << "Unsupported platform" << std::endl;
+	return 1;
+#endif
+	int result = std::system(appToOpen.c_str());
+
+	if (result == 0) {
+		std::cout << "Application launched successfully." << std::endl;
+	}
+	else {
+		std::cerr << "Failed to launch application. Error code: " << result << std::endl;
+	}
+
 	return 0;
 }
